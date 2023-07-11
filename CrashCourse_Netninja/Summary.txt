@@ -35,4 +35,47 @@
     
         - depend on use case, sometimes VM may also be better
 
+
+== 2 Installing Docker ==
+    - Install the docker engine
+        - Running Docker on Windows might not be as smooth
+        - require WSL 2 Backend
+            - Window Subsystem for Linux (Run Linux env on Windows without VM)
+                - allow to run Docker on Windows
+
+    - Once installed, must ensure Docker running to be able to use
+        - check btm right of screen to see if <Whale> icon running 
+
+== 3 Docker Images & Containers ==
+    
+    -- Docker Images --
+        - blueprint for containers
+        - have its own file system independent of computer
+        - read-only, once image created, cannot be edited
+            - if want to change anything, need to create new image
+        
+
+        Contains the following:
+            - Runtime environment (specific node version etc.)
+            - Application code(s)
+            - Dependencies required
+            - Extra configuration (env variables etc.)
+            - Commands
+
+    -- Docker Containers --
+        - Runnable instances of an image
+        - when running images, it creates a container
+        - also known as isolated process
+            - run independently from any other process on computer
+            - being run in "own box" somewhere in computer
+            - completely isolated from any other process
+
+    -- Significance --
+        - Can just share image to any other dev who want to run app
+            - other dev run image, creating container
+            - their own software versions does not matter
+                - the image contain all the files / dependencies required
+        - Container will run similar regardless of any computers
+
+        
     
