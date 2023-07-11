@@ -1,0 +1,38 @@
+== 1 Intro to Docker ==
+    - Creates containers to run apps / servers in isolated environment
+        - Node app (app server)
+        - React app (app server)
+        - MongoDB (db server)
+        etc.
+
+    -- Significance in team development --
+        - developer 1 making app in NodeJS environment
+            - node version 17
+            - relevant environment variables
+            - dependencies / runtime env
+            etc.
+    
+        - dev. 1 push everything into Docker container
+        - dev. 1 can pass container to other devs
+        - other devs install required content in container
+        (Save a lot of set-up time)
+
+    - Docker:
+        - tool for creating / managing containers
+        - Containers are also easier to push to production server
+            - don't need to configure server, already within container
+
+
+    -- Container vs VMs --
+        - VM
+            - has own full OS
+            - typically slower
+
+        - Containers
+            - share host's OS (less bloated)
+            - typically quicker
+            - more lightweight
+    
+        - depend on use case, sometimes VM may also be better
+
+    
