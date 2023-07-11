@@ -129,3 +129,99 @@
                     ctrl+d to exit container
                     docker stop <container_id> : to stop container (might take some time)
                     docker rm <container_id> : to delete container
+
+== 5 Dockerfile ==
+    - Set of instructions to create own customized image
+
+    - base layer : parent image (OS + runtime) (typically pulled from dockerhub)
+    - Other layers:
+        - source code
+        - Dependencies
+        - run Commands
+
+        (These layers will add-on to the parent image, making it customized to own use case)
+
+
+        1) Create simple node app
+            - create "api" dir
+                - npm i express
+                - npm i nodemon
+                - delete node_modules, purpose of install is to create package-lock.json
+                    - want to run node_modules in isolated container
+                - create app.js (see file for content (simple express app)) (not focus)
+
+        2) Create Dockerfile (no extension)
+            - set of instructions for creating image
+            - each instruction on each line
+            - install "Docker" vscode extension
+
+                2.1) Insert parent layer
+                1st line = parent image (base layer)
+                    FROM node:17-alpine
+                        - docker search local computer for image, else download from dockerhub
+
+                2.2) Add app layer 
+                        COPY . . (copy to root folder of image, not recommended)
+                            - Dockerfile in same dir as app.js
+                            - first . represents current dir
+                            - second . represents root dir of image
+                            - copy all in current dir into root dir of image
+                            COPY . /app
+                                - copy files into /app folder in image
+                                - more common, instead of copying to root
+
+                            if Dockerfile not in same dir, but in src dir
+                            COPY ./src /app
+                
+                2.3) add dependencies (need to run npm install)
+
+                    WORKDIR /app 
+                        - when running commands, go to /app dir instead of in root dir
+                        - if specified /app as WORKDIR, COPY must be relative to /app
+                        - COPY . . (COPY current dir to /app dir in image)
+                            - since WORKDIR specified as /app
+
+                    RUN npm install 
+                        - cmd runs in root dir by default. need to specify WORKDIR
+
+                    - "RUN" command runs concurrently while image is being built
+
+                2.4) Add command to start instance of container
+                    - Image does not run server, image creates Container
+                    - container then used to run server
+                    - therefore, should not use "RUN npm run dev" to init server.
+                    - must start container first
+
+                    CMD ["node", "app.js"]
+                        - any cmds that should be executed when a container is started
+                        - cmd node app.js will execute
+
+                2.5) Add exposed instructions
+                    - indicate which port container should be exposed   
+                    - optional
+                    - required only when using Docker Desktop app
+                    - can use cmdline to include port
+
+                    EXPOSE 4000
+
+                Dockerfile:
+
+                    FROM node:17-alpine
+
+                    WORKDIR /app
+
+                    COPY . .
+
+                    EXPOSE 4000
+
+                    RUN npm install
+
+                2.6) Run Dockerfile in terminal (where Dockerfile is located)
+                    - "docker build -t myapp ."
+                        - -t : tag to add image name
+                        - image name : myapp
+                        - . :path to Dockerfile relative to terminal. if same, use .
+                
+                2.7) check Images in docker desktop or "docker images" for new image
+
+
