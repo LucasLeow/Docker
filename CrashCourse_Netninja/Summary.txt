@@ -79,3 +79,53 @@
 
         
     
+== 4 Parent Images & Docker Hub ==
+
+    -- Parent Images --
+        - Images are made of several layers
+        - install from dockerhub (may take up quite some space)
+            
+            1) Base layer : Parent image
+                - includes the OS & runtime environment
+                    - eg: Specific node version installed on Linux OS 
+        
+            2) Other layers (above Base layer)
+                - source code layer
+                    - contains the App source codes
+                - dependencies layer
+                    - contains the dependencies required
+
+    -- dockerhub --
+        - repo of available images created by others
+            - some are recognized official, some are by other people
+        - similar to github but for docker
+        - can search for specific image & download
+
+        eg:
+            - Creating image for node app
+
+            1) Create Parent Node Image
+                - search "node" in dockerhub
+                - tags represent different variation of node with its OS dist.
+                    - 17-alpine (node version 17, alpine Linux dist.)
+                - can add tag as flag to specify which variation of node to pull
+                    - alpine: lightweight linux dist.\
+                - if never specify tag, will grab latest variation
+
+                1.1) Copy command from dockerhub
+                    - docker pull node
+                1.2) open terminal (any path is fine)
+                    - docker will install to own special directory
+                    - run command to install latest tag
+                1.3) verify parent image installed on Docker Desktop (Images tab)
+                1.4) Run Image (via Docker Desktop or cmd line)
+                    - creates a container (instance of an image)
+                    - running image via Docker Desktop causes it to exit immediately
+
+                    docker images : To see images available for running or refer to Docker Desktop
+                    docker run -d -it <image_name> : to create instance of container
+                    docker ps -a : to check all containers (including stopped ones)
+                    docker exec -it <container_id> /bin/sh : to enter container in cmd
+                    ctrl+d to exit container
+                    docker stop <container_id> : to stop container (might take some time)
+                    docker rm <container_id> : to delete container
