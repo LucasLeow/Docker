@@ -422,6 +422,34 @@
         1) Create a parent directory where all project dir will be within
             - i.e dir that contains DB dir, React dir & api dir etc.
 
+        2) Create "docker-compose.yaml" in parent dir
+            - indentations important in yaml file
+                - version: version of docker_compose
+                - services: multiple nested values to tell docker_compose how to build service & run containers
+                - api : project name, can be named project1 project2 etc.
+                    - build : path to Dockerfile in project
+                    - volumes: include if any (to link host computer dir to container dir)
+                        - ./app/node_modules : to segregate node_modules within container
 
+                version: "3.8"
+                services:
+                api:
+                    build: ./api
+                    container_name: api_container
+                    ports:
+                    - '4000:4000'
+                    volumes:
+                    - ./api:/app
+                    - /app/node_modules
+        
+        3) Go to parent directory in terminal
+            - "docker-compose up" to set up using docker compose
+
+        4) docker-compose down
+            - to stop container & delete container
+        
+            docker-compose down --rmi all -v
+                - remove all images created by docker compose
+                - -v remove all volumes created by compose
     
 
