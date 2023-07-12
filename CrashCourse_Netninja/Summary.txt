@@ -269,3 +269,58 @@
 
                         docker rm <container_id> : to delete container
                         docker image rm <image_id> OR <image_name>
+
+== 8 Layer Caching ==
+    - Each line in Dockerfile add something new to Image    
+        - can be treated as new layer for each new line
+        - each new line = something added to image
+
+    - Once image created, it stays read-only    
+        - if any changes, need to remake new Image
+
+    -- Layer caching -- 
+        - During Image building, Docker stores every layer in cache
+        - When building new Image, Docker checks cache for existing Image + layers
+        - if same layer exist, take from cache instead of reinstalling
+
+        Benefits:
+            - if make small changes to source code, do not need to reinstall parent layer
+            - any other layers dependent on source will have to be rebuilt
+
+        ** If dependencies unchanged but source code changed, swap positions in Dockerfile
+
+            - previously:
+
+                COPY . .
+                
+                RUN npm install
+
+            - new:
+                COPY package.json . (. refers to the WORKDIR if specified, else into root of container file system)
+
+                RUN npm install
+
+                COPY . .
+
+            Reason:
+                - No dependency changed, layer cached & no need to reinstall
+                - if put RUN npm install later (like in previously), Docker thinks that dependency changed
+                    - due to source code change
+                    - slower image build
+                - need to copy over package.json over first, so that can run npm install
+
+                eg. : app.js (source code) has changes
+
+                    FROM node:17-alpine
+
+                    WORKDIR /app
+
+                    COPY package.json .
+
+                    RUN npm install
+
+                    COPY . .
+
+                    EXPOSE 4000
+
+                    CMD ["node", "app.js"]
