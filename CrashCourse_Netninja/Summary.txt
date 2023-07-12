@@ -144,6 +144,7 @@
 
         1) Create simple node app
             - create "api" dir
+                - npm i cors
                 - npm i express
                 - npm i nodemon
                 - delete node_modules, purpose of install is to create package-lock.json
@@ -212,9 +213,12 @@
 
                     COPY . .
 
+                    RUN npm install
+
                     EXPOSE 4000
 
-                    RUN npm install
+                    CMD ["node", "app.js"]
+
 
                 2.6) Run Dockerfile in terminal (where Dockerfile is located)
                     - "docker build -t myapp ."
@@ -224,4 +228,44 @@
                 
                 2.7) check Images in docker desktop or "docker images" for new image
 
+== 6 Docker ignore ==
+    - node modules installed inside image with RUN npm install command
+    - sometimes, node_modules exist inside local dir
+    - don't want to COPY . . (copy all dir to image dir)
+    - want to ignore some dir / files
 
+    Solution : use dockerignore file (similar to gitignore)
+
+        1) create ".dockerignore" file
+            node_modules
+
+            *.md 
+                - ignore any file with .md extension
+
+== 7 Start / Stop containers from image ==
+        
+                    docker images : To see images available for running or refer to Docker Desktop
+                    docker ps -a : to check all containers (including stopped ones)
+
+                    To create container:
+
+                        docker run -d -it --name <container_name> -p 5000:4000  <image_name> : to create instance of container
+                            -d : detach 
+                            -it : interactive terminal
+                            -p : publish container port to host computer
+                            5000: port mapped to localhost
+                            4000: port exposed by container
+                        
+                    
+                    ctrl+d to exit container or open separate terminal: 
+                
+                        docker stop <container_id> OR <container_name> : to stop container (might take some time)
+
+                    To start existing container: 
+                        docker start <container_name> OR <container_id>
+                            - don't need to map ports again
+
+                    Delete image / container: 
+
+                        docker rm <container_id> : to delete container
+                        docker image rm <image_id> OR <image_name>
