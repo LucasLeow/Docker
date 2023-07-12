@@ -332,7 +332,8 @@
         - containers built from image must all be deleted
         -f flag: delete image forcefully together with container(s)
     
-
+    - docker start <container_name> OR <container_id> (when container already created but stopped)'
+        - by default start in detached mode
     - docker stop <container_name> OR <container_id>
     - docker container rm <container_name> OR <container_id>
     - docker container rm container_1 container_2 container_3 (delete multiple containers)
@@ -356,5 +357,57 @@
             - "docker run --name myappContainer -p 4000:4000 myapp:v1"
             
 
+== 10 Docker Volumes ==
+    - specify folders on host computer made available to run containers
+    - map folders on host computer to specified containers
+    - any changes in folders in host computer will map accordingly to container
+
+    advantage:
+        - dont have to build new image whenever there is a change
+        - good for local development whereby changed files are on local computer
+
+    * Image remains unchanged as per initial build
+        - if want to share image with others, need to rebuild image
+        - need to have node_modules installed in host computer & container
+
+    implementation:
+        - require help from nodemon to automatically detect server change
+        - install nodemon globally
+        * note: nodemon won't really be needed in production, only good for development
+
+        1)
+            Inside Dockerfile:
+                FROM node:17-alpine
+
+                RUN npm install -g nodemon
+
+                WORKDIR /app
+
+                COPY package.json .
+
+                RUN npm install
+
+                COPY . .
+
+                EXPOSE 4000
+
+                CMD ["npm", "run", "dev"]
+
+
+        2) docker build -t myapp:nodemon .
+            - build a new image called myapp with version tag nodemon
+        
+        3) "npm i" in host computer project dir
+            - ensure host computer has node_modules as well
+            - if map volume to container volume, container volume referencing from host computer
+            - therefore, require node_modules in both locations
+        
+        4) docker run --name myContainer -p <hostPort>:<container_port> --rm -v <absolute_path_host_dir>:<container_WORKdir> -v <anonymous_volume> <image_name>
+            -v <anonymous_volume>: to map to node_modules inside container and unlinked from host computer
+                - isolate particular folder from being mounted
+            --rm flag: remove container once stopped
+            -v : volume mount
+
+            eg: docker run --name myContainer -p 5000:4000 --rm -v D:\SelfLearning\BackEnd\Docker\api:/app -v /app/node_modules myapp:nodemon
 
 
