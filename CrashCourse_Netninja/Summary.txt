@@ -523,3 +523,24 @@
 
         docker-compose down --rmi all -v
             - to stop all containers + remove all containers + remove all volumes
+
+== 13 Sharing image on dockerhub ==
+    
+        1) go to https://hub.docker.com/
+        2) create repository
+            - provide name & details
+        3) go to desired project dir to create image
+            - docker build -t lucasleow/myapp:latest .
+            - docker images (to check image installed correctly)
+
+        4) docker login (in terminal)
+
+        5) "docker push <image_name>:<tag_name>"
+            docker push lucasleow/myapp
+            - if never specify tag name, will default to :latest
+
+        6) verify of dockerhub that image pushed successfully
+
+        7) "docker pull lucasleow/myapp:latest" to pull image to local machine
+        
+
