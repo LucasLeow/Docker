@@ -411,3 +411,17 @@
             eg: docker run --name myContainer -p 5000:4000 --rm -v D:\SelfLearning\BackEnd\Docker\api:/app -v /app/node_modules myapp:nodemon
 
 
+== 11 Docker Compose ==
+    - sometimes want to create multiple containers with interaction
+    - tedious to simply use cmd line with all the long commands
+
+    Solution:
+        - utilize Docker compose to set up all the required commands within a file
+        - then execute file for all containers to be initialized
+
+        1) Create a parent directory where all project dir will be within
+            - i.e dir that contains DB dir, React dir & api dir etc.
+
+
+    
+
