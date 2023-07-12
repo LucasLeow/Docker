@@ -324,3 +324,37 @@
                     EXPOSE 4000
 
                     CMD ["node", "app.js"]
+
+
+== 9 Managing Images & Containers ==
+
+    - docker image rm <image_name> OR <image_id>
+        - containers built from image must all be deleted
+        -f flag: delete image forcefully together with container(s)
+    
+
+    - docker stop <container_name> OR <container_id>
+    - docker container rm <container_name> OR <container_id>
+    - docker container rm container_1 container_2 container_3 (delete multiple containers)
+
+    - docker system prune -a 
+        - remove all images | containers | volumes
+
+    -- Versioning Images --
+        - using tags
+            - anything after ":"
+
+        eg:
+            node:alpine
+            node:17.4.0-alpine3.15
+
+        -- Creating own versioned Image --
+            1) go to terminal where Dockerfile located
+            2) run "docker build -t myapp:v1 ."
+
+            - docker will automatically recognize tag as "v1"
+            - "docker run --name myappContainer -p 4000:4000 myapp:v1"
+            
+
+
+
