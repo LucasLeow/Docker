@@ -449,7 +449,9 @@
             - to stop container & delete container
         
             docker-compose down --rmi all -v
-                - remove all images created by docker compose
+                - remove all containers, images created by docker compose
                 - -v remove all volumes created by compose
-    
 
+
+== 12 Dockerizing React App ==
+    - 
