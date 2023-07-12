@@ -454,4 +454,72 @@
 
 
 == 12 Dockerizing React App ==
-    - 
+    - add the React project into parent dir : "CC_NN" dir
+
+        1) create .dockerignore to ignore node_modules within React app
+            node_modules
+
+        2) create Dockerfile for React project
+
+            FROM node:16-alpine
+
+            WORKDIR /app (specify DIR in container instead of root)
+
+            COPY package.json . (copy package.json into WORKDIR)
+
+            RUN npm install 
+
+            COPY . . (copy all other source code to Container)
+
+            EXPOSE 3000 (use port 3000 in container for react app)
+            
+            CMD ["npm", "start"]
+
+        
+        3) Include React project setup in parent docker-compose.yaml
+
+            myblog:
+                build: ./myblog
+                container_name: react_container
+                ports:
+                - '3000:3000'
+                volumes:
+                - ./myblog:/app
+                - /app/node_modules
+                stdin_open: true
+                tty: true
+
+                stdin_open & tty keeps react app open in interactive terminal
+
+
+
+    Final docker-compose.yaml:
+
+            version: "3.8"
+            services:
+            api:
+                build: ./api
+                container_name: api_container
+                ports:
+                - '4000:4000'
+                volumes:
+                - ./api:/app
+                - /app/node_modules
+            myblog:
+                build: ./myblog
+                container_name: react_container
+                ports:
+                - '3000:3000'
+                volumes:
+                - ./myblog:/app
+                - /app/node_modules
+                stdin_open: true
+                tty: true
+
+        4) go to terminal of parent dir:
+            docker-compose up
+                - wait for setup and check for any errors
+
+
+        docker-compose down --rmi all -v
+            - to stop all containers + remove all containers + remove all volumes
